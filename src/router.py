@@ -16,7 +16,8 @@ db_sheet_url = "https://docs.google.com/spreadsheets/d/17-xMFhMnay54HI_gvdT2-IUU
 
 
 @router.post("/add_to_database", status_code=201)
-def add_to_database(item: DBItem):
+def add_to_database(item: DBItem) -> Response:
+    """Add a new item to the google sheet database."""
     db_sheet = gc.open_by_url(db_sheet_url)
     worksheet = db_sheet.get_worksheet(0)
     worksheet.append_row([item.id, item.amount, item.sales_rep])
@@ -26,6 +27,11 @@ def add_to_database(item: DBItem):
 
 @router.get("/calculate_leaderboard")
 def calculate_leaderboard() -> Leaderboard:
+    """
+    Calculate the leaderboard for the sales team
+
+    :return: Leaderboard with detailed info
+    """
     db_sheet = gc.open_by_url(db_sheet_url)
     worksheet = db_sheet.get_worksheet(0)
     data = worksheet.get_all_values()
