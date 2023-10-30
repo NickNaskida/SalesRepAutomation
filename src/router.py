@@ -4,7 +4,7 @@ from pathlib import Path
 import gspread
 from fastapi import APIRouter, Response
 
-from src.schemas import DBItem
+from src.schemas import DBItem, Leaderboard
 
 SRC_DIR = Path(__file__).resolve().parent
 
@@ -25,5 +25,23 @@ def add_to_database(item: DBItem):
 
 
 @router.get("/calculate_leaderboard")
-def calculate_leaderboard():
-    pass
+def calculate_leaderboard() -> Leaderboard:
+    db_sheet = gc.open_by_url(db_sheet_url)
+    worksheet = db_sheet.get_worksheet(0)
+    data = worksheet.get_all_values()
+
+    # Calculate the total sales for each sales rep
+    sales_rep_totals = {}
+
+    for row in data[1:]:
+        sales_rep_totals[row[2]] = sales_rep_totals.get(row[2], 0) + int(row[1])
+
+    sorted_sales_rep_totals = sorted(sales_rep_totals.items(), key=lambda x: x[1], reverse=True)
+
+    leaderboard = Leaderboard(
+        sales_team_total=f"${sum([int(row[1]) for row in data[1:]])}",  # Sum the total sales
+        first_place=f"{sorted_sales_rep_totals[0][0]} - ${sorted_sales_rep_totals[0][1]}",
+        second_place=f"{sorted_sales_rep_totals[1][0]} - ${sorted_sales_rep_totals[1][1]}",
+    )
+
+    return leaderboard
