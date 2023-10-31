@@ -49,3 +49,4 @@ class DevSettings:
     python main.py
     ```
 
+10. Enjoy! (API Swagger documentation at https://localhost:8080/docs)
