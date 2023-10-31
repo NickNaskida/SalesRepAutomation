@@ -28,7 +28,7 @@
    
 6. Setup google service account
    - https://docs.gspread.org/en/latest/oauth2.html#for-bots-using-service-account
-   - Above is the tutorial on how to setup a service account in google cloud console.
+   - Above is the tutorial on how to setup a service account in google cloud console. (Come back to the tutorial once you download the json file with credentials)
    - Download the json file and save it in the src folder as `service_account.json`
 
 7. Setup google sheet database
