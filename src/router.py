@@ -4,6 +4,7 @@ from pathlib import Path
 import gspread
 from fastapi import APIRouter, Response
 
+from src.config import settings
 from src.schemas import DBItem, Leaderboard
 
 SRC_DIR = Path(__file__).resolve().parent
@@ -12,7 +13,7 @@ router = APIRouter()
 gc = gspread.service_account(
     filename=os.path.join(SRC_DIR, "service_account.json")
 )
-db_sheet_url = "https://docs.google.com/spreadsheets/d/17-xMFhMnay54HI_gvdT2-IUU8YrqIAUzq6-GQKC0JWQ/edit#gid=0"
+db_sheet_url = settings.DB_SHEET_URL
 
 
 @router.post("/add_to_database", status_code=201)
